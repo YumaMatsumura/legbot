@@ -1,0 +1,22 @@
+name: build and test
+on: 
+  pull_request:
+    branches: [humble-devel]
+  push:
+    branches: [humble-devel]
+jobs:
+  build_simrobo:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: ros-tooling/setup-ros@v0.3
+        with:
+          required-ros-distributions: humble
+      - uses: ros-tooling/action-ros-ci@v0.2
+        id: action_ros_ci_step
+        with:
+          target-ros2-distro: humble
+          package-name:
+            legbot
+            legbot_description
+            legbot_gazebo
