@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<robot name="upper_leg" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find legbot_description)/urdf/leg/upper_leg.gazebo.xacro" />
+  
+  <xacro:macro name="upper_leg" params="name width length depth shift mass *origin">
+    <material name="${name}_upper_leg_color">
+      <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+    
+    <link name="${name}_upper_leg">
+      <inertial>
+        <origin xyz="0 ${shift} 0" rpy="0 0 0"/>
+        <mass value="${mass}" />
+        <inertia ixx="${mass/12*(length*length+depth*depth)}" ixy="0" ixz="0"
+                 iyx="0" iyy="${mass/12*(width*width+depth*depth)}" iyz="0"
+                 izx="0" izy="0" izz="${mass/12*(width*width+length*length)}"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 ${shift} 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${width} ${length} ${depth}"/>
+        </geometry>
+        <material name="${name}_upper_leg_color"/>
+      </visual>
+      <collision>
+        <origin xyz="0 ${shift} 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${width} ${length} ${depth}"/>
+        </geometry>
+      </collision>
+    </link>
+    
+    <joint name="${name}_hip_to_upper_leg_joint" type="revolute">
+      <limit effort="25" lower="${-pi/2}" upper="${pi/2}" velocity="1.5"/>
+      <xacro:insert_block name="origin"/>
+      <parent link="${name}_hip"/>
+      <child link="${name}_upper_leg"/>
+      <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+    
+    <!-- Gazebo Plugin -->
+    <xacro:upper_leg_gazebo name="${name}"/>
+  </xacro:macro>
+</robot>

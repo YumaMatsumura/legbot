@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<robot name="hip" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find legbot_description)/urdf/leg/hip.gazebo.xacro" />
+  
+  <xacro:macro name="hip" params="name parent depth width height mass *origin">
+    <material name="${name}_hip_color">
+      <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+    
+    <link name="${name}_hip">
+      <inertial>
+        <origin xyz="${depth/2} 0 0" rpy="0 0 0"/>
+        <mass value="${mass}" />
+        <inertia ixx="${mass/12*(width*width+height*height)}" ixy="0" ixz="0"
+                 iyx="0" iyy="${mass/12*(depth*depth+height*height)}" iyz="0"
+                 izx="0" izy="0" izz="${mass/12*(depth*depth+width*width)}"/>
+      </inertial>
+      <visual>
+        <origin xyz="${depth/2} 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${depth} ${width} ${height}"/>
+        </geometry>
+        <material name="${name}_hip_color"/>
+      </visual>
+      <collision>
+        <origin xyz="${depth/2} 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${depth} ${width} ${height}"/>
+        </geometry>
+      </collision>
+    </link>
+    
+    <joint name="${name}_body_to_hip_joint" type="revolute">
+      <limit effort="25" lower="${-pi/2}" upper="${pi/2}" velocity="1.5"/>
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}_hip"/>
+      <axis xyz="0.0 0.0 1.0"/>
+    </joint>
+    
+    <!-- Gazebo Plugin -->
+    <xacro:hip_gazebo name="${name}"/>
+  </xacro:macro>
+</robot>
