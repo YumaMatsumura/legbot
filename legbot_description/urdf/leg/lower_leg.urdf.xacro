@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="lower_leg" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:include filename="$(find legbot_description)/urdf/leg/lower_leg.gazebo.xacro" />
+  <xacro:include filename="$(find legbot_description)/urdf/leg/lower_leg.ros2_control.xacro" />
   
   <xacro:macro name="lower_leg" params="name width length depth shift mass *origin">
     <material name="${name}_lower_leg_color">
@@ -40,5 +41,8 @@
     
     <!-- Gazebo Plugin -->
     <xacro:lower_leg_gazebo name="${name}"/>
+    
+    <!-- ros2_control Plugin -->
+    <xacro:lower_leg_ros2_control name="${name}"/>
   </xacro:macro>
 </robot>

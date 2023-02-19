@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="legbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <!-- include xacro files -->
+  <xacro:include filename="$(find legbot_description)/urdf/legbot.ros2_control.xacro"/>
   <xacro:include filename="$(find legbot_description)/urdf/body/body.urdf.xacro"/>
   <xacro:include filename="$(find legbot_description)/urdf/leg/hip.urdf.xacro"/>
   <xacro:include filename="$(find legbot_description)/urdf/leg/upper_leg.urdf.xacro"/>
@@ -84,4 +85,7 @@
   <xacro:foot name="rb" radius="${foot_radius}" mass="${foot_mass}">
     <origin xyz="0 ${lower_leg_width-lower_leg_length} 0" rpy="0 0 0"/>
   </xacro:foot>
+  
+  <!-- ======== ros2_control ======== -->
+  <xacro:legbot_ros2_control />
 </robot>

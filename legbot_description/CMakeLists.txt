@@ -10,7 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(xacro REQUIRED)
 find_package(rviz2 REQUIRED)
 
-install(DIRECTORY urdf launch rviz
+install(DIRECTORY urdf launch rviz controllers
   DESTINATION share/${PROJECT_NAME}
   )
 

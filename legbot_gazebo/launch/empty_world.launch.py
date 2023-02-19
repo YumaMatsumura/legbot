@@ -24,22 +24,24 @@ def generate_launch_description():
         arguments=['-entity', 'legbot',
                         '-x', '0.0',
                         '-y', '0.0',
-                        '-z', '0.2',
+                        '-z', '0.5',
                     '-topic', '/robot_description'],
         output='screen'
-    )
+        )
     
-    #joint_state_broadcaster = ExecuteProcess(
-    #    cmd=["ros2", "control", "load_controller", "joint_state_broadcaster", 
-    #         "--set-state", "start"],
-    #    output="screen"
-    #)
+    load_joint_state_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', 'legbot_position_controller',
+             '--set-state', 'active'],
+        shell=True,
+        output='screen'
+        )
     
-    #velocity_controller = ExecuteProcess(
-    #    cmd=["ros2", "control", "load_controller", "velocity_controller", 
-    #         "--set-state", "start"],
-    #    output="screen"
-    #)
+    load_joint_trajectory_position_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', 'joint_state_controller',
+             '--set-state', 'active'],
+        shell=True,
+        output='screen'
+        )
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -55,34 +57,33 @@ def generate_launch_description():
         # ===== display launch (RViz2) ===== #
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(display_launch_path)
-        ),
+            ),
         
         # ===== Gazebo ===== #
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(gzserver_path),
             condition=IfCondition(LaunchConfiguration('server'))
-        ),
+            ),
         
         IncludeLaunchDescription(
-        
             PythonLaunchDescriptionSource(gzclient_path),
             condition=IfCondition(LaunchConfiguration('gui'))
-        ),
+            ),
         
         spawn_entity,
         
         # ===== Ros2 Control ===== #        
-        #RegisterEventHandler(
-        #    OnProcessExit(
-        #        target_action=spawn_entity,
-        #        on_exit=[velocity_controller]
-        #    )
-        #),
+        RegisterEventHandler(
+            OnProcessExit(
+                target_action=spawn_entity,
+                on_exit=[load_joint_state_controller]
+                )
+            ),
         
-        #RegisterEventHandler(
-        #    OnProcessExit(
-        #        target_action=joint_state_broadcaster,
-        #        on_exit=[velocity_controller]
-        #    )
-        #)       
+        RegisterEventHandler(
+            OnProcessExit(
+                target_action=load_joint_state_controller,
+                on_exit=[load_joint_trajectory_position_controller]
+                )
+            )       
     ])
