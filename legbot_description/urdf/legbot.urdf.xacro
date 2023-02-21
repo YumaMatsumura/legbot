@@ -7,6 +7,7 @@
   <xacro:include filename="$(find legbot_description)/urdf/leg/upper_leg.urdf.xacro"/>
   <xacro:include filename="$(find legbot_description)/urdf/leg/lower_leg.urdf.xacro"/>
   <xacro:include filename="$(find legbot_description)/urdf/leg/foot.urdf.xacro"/>
+  <xacro:include filename="$(find legbot_description)/urdf/sensors/lidar.urdf.xacro"/>
   
   <!-- property -->
   <xacro:property name="body_depth" value="0.6"/>
@@ -29,6 +30,9 @@
   <xacro:property name="lower_leg_mass" value="0.2"/>
   <xacro:property name="foot_radius" value="0.03"/>
   <xacro:property name="foot_mass" value="0.1"/>
+  <xacro:property name="lidar_radius" value="0.04"/>
+  <xacro:property name="lidar_length" value="0.04"/>
+  <xacro:property name="lidar_mass" value="0.015"/>
   
   <!-- ======== Body Description ======== -->
   <xacro:body name="base_link" depth="${body_depth}" width="${body_width}" height="${body_height}" mass="${body_mass}"/>
@@ -85,6 +89,11 @@
   <xacro:foot name="rb" radius="${foot_radius}" mass="${foot_mass}">
     <origin xyz="0 ${lower_leg_width-lower_leg_length} 0" rpy="0 0 0"/>
   </xacro:foot>
+  
+  <!-- ======== Sensors Description ======== -->
+  <xacro:lidar name="laser" parent="base_link" radius="${lidar_radius}" length="${lidar_length}" mass="${lidar_mass}">
+    <origin xyz="0 0 ${body_height+lidar_length/2}" rpy="0 0 0"/>
+  </xacro:lidar>
   
   <!-- ======== ros2_control ======== -->
   <xacro:legbot_ros2_control />
