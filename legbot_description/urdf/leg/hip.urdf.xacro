@@ -3,28 +3,37 @@
   <xacro:include filename="$(find legbot_description)/urdf/leg/hip.gazebo.xacro" />
   <xacro:include filename="$(find legbot_description)/urdf/leg/hip.ros2_control.xacro" />
   
-  <xacro:macro name="hip" params="name parent depth width height mass *origin">
+  <xacro:macro name="hip_origin">
+    <xacro:if value="${side==1}">
+      <origin xyz="0 ${width/2} 0" rpy="0 0 0"/>
+    </xacro:if>
+    <xacro:if value="${side==-1}">
+      <origin xyz="0 ${-width/2} 0" rpy="0 0 0"/>
+    </xacro:if>
+  </xacro:macro>
+  
+  <xacro:macro name="hip" params="name parent depth width height mass side *origin">
     <material name="${name}_hip_color">
       <color rgba="1.0 1.0 1.0 1.0"/>
     </material>
     
     <link name="${name}_hip">
       <inertial>
-        <origin xyz="${depth/2} 0 0" rpy="0 0 0"/>
+        <xacro:hip_origin/>
         <mass value="${mass}" />
         <inertia ixx="${mass/12*(width*width+height*height)}" ixy="0" ixz="0"
                  iyx="0" iyy="${mass/12*(depth*depth+height*height)}" iyz="0"
                  izx="0" izy="0" izz="${mass/12*(depth*depth+width*width)}"/>
       </inertial>
       <visual>
-        <origin xyz="${depth/2} 0 0" rpy="0 0 0"/>
+        <xacro:hip_origin/>
         <geometry>
           <box size="${depth} ${width} ${height}"/>
         </geometry>
         <material name="${name}_hip_color"/>
       </visual>
       <collision>
-        <origin xyz="${depth/2} 0 0" rpy="0 0 0"/>
+        <xacro:hip_origin/>
         <geometry>
           <box size="${depth} ${width} ${height}"/>
         </geometry>
@@ -36,7 +45,7 @@
       <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
       <child link="${name}_hip"/>
-      <axis xyz="0.0 0.0 1.0"/>
+      <axis xyz="1.0 0.0 0.0"/>
     </joint>
     
     <!-- Gazebo Plugin -->

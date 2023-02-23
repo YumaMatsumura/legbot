@@ -10,23 +10,23 @@
     
     <link name="${name}_upper_leg">
       <inertial>
-        <origin xyz="0 ${shift} 0" rpy="0 0 0"/>
+        <origin xyz="0 0 ${shift}" rpy="0 0 0"/>
         <mass value="${mass}" />
-        <inertia ixx="${mass/12*(length*length+depth*depth)}" ixy="0" ixz="0"
-                 iyx="0" iyy="${mass/12*(width*width+depth*depth)}" iyz="0"
-                 izx="0" izy="0" izz="${mass/12*(width*width+length*length)}"/>
+        <inertia ixx="${mass/12*(depth*depth+length*length)}" ixy="0" ixz="0"
+                 iyx="0" iyy="${mass/12*(width*width+length*length)}" iyz="0"
+                 izx="0" izy="0" izz="${mass/12*(width*width+depth*depth)}"/>
       </inertial>
       <visual>
-        <origin xyz="0 ${shift} 0" rpy="0 0 0"/>
+        <origin xyz="0 0 ${shift}" rpy="0 0 0"/>
         <geometry>
-          <box size="${width} ${length} ${depth}"/>
+          <box size="${width} ${depth} ${length}"/>
         </geometry>
         <material name="${name}_upper_leg_color"/>
       </visual>
       <collision>
-        <origin xyz="0 ${shift} 0" rpy="0 0 0"/>
+        <origin xyz="0 0 ${shift}" rpy="0 0 0"/>
         <geometry>
-          <box size="${width} ${length} ${depth}"/>
+          <box size="${width} ${depth} ${length}"/>
         </geometry>
       </collision>
     </link>
@@ -36,7 +36,7 @@
       <xacro:insert_block name="origin"/>
       <parent link="${name}_hip"/>
       <child link="${name}_upper_leg"/>
-      <axis xyz="0.0 0.0 1.0"/>
+      <axis xyz="0.0 1.0 0.0"/>
     </joint>
     
     <!-- Gazebo Plugin -->

@@ -14,8 +14,8 @@
   <xacro:property name="body_width" value="0.3"/>
   <xacro:property name="body_height" value="0.12"/>
   <xacro:property name="body_mass" value="1"/>
-  <xacro:property name="hip_depth" value="0.1"/>
-  <xacro:property name="hip_width" value="0.05"/>
+  <xacro:property name="hip_depth" value="0.05"/>
+  <xacro:property name="hip_width" value="0.1"/>
   <xacro:property name="hip_height" value="0.05"/>
   <xacro:property name="hip_mass" value="0.2"/>
   <xacro:property name="hip_shift_x" value="0.25"/>
@@ -38,56 +38,56 @@
   <xacro:body name="base_link" depth="${body_depth}" width="${body_width}" height="${body_height}" mass="${body_mass}"/>
   
   <!-- ======== Leg Description ======== -->
-  <xacro:hip name="lf" parent="base_link" depth="${hip_depth}" width="${hip_width}" height="${hip_height}" mass="${hip_mass}">
-    <origin xyz="${hip_shift_x} ${hip_shift_y} ${body_height/2}" rpy="${pi/2} 0 ${pi/2}"/>
+  <xacro:hip name="lf" parent="base_link" depth="${hip_depth}" width="${hip_width}" height="${hip_height}" mass="${hip_mass}" side="1">
+    <origin xyz="${hip_shift_x} ${hip_shift_y} ${body_height/2}" rpy="0 0 0"/>
   </xacro:hip>
-  <xacro:hip name="rf" parent="base_link" depth="${hip_depth}" width="${hip_width}" height="${hip_height}" mass="${hip_mass}">
-    <origin xyz="${hip_shift_x} ${-hip_shift_y} ${body_height/2}" rpy="${pi/2} ${pi} ${pi/2}"/>
+  <xacro:hip name="rf" parent="base_link" depth="${hip_depth}" width="${hip_width}" height="${hip_height}" mass="${hip_mass}" side="-1">
+    <origin xyz="${hip_shift_x} ${-hip_shift_y} ${body_height/2}" rpy="0 0 0"/>
   </xacro:hip>
-  <xacro:hip name="lb" parent="base_link" depth="${hip_depth}" width="${hip_width}" height="${hip_height}" mass="${hip_mass}">
-    <origin xyz="${-hip_shift_x} ${hip_shift_y} ${body_height/2}" rpy="${pi/2} 0 ${pi/2}"/>
+  <xacro:hip name="lb" parent="base_link" depth="${hip_depth}" width="${hip_width}" height="${hip_height}" mass="${hip_mass}" side="1">
+    <origin xyz="${-hip_shift_x} ${hip_shift_y} ${body_height/2}" rpy="0 0 0"/>
   </xacro:hip>
-  <xacro:hip name="rb" parent="base_link" depth="${hip_depth}" width="${hip_width}" height="${hip_height}" mass="${hip_mass}">
-    <origin xyz="${-hip_shift_x} ${-hip_shift_y} ${body_height/2}" rpy="${pi/2} ${pi} ${pi/2}"/>
+  <xacro:hip name="rb" parent="base_link" depth="${hip_depth}" width="${hip_width}" height="${hip_height}" mass="${hip_mass}" side="-1">
+    <origin xyz="${-hip_shift_x} ${-hip_shift_y} ${body_height/2}" rpy="0 0 0"/>
   </xacro:hip>
   
   <xacro:upper_leg name="lf" width="${upper_leg_width}" length="${upper_leg_length}" depth="${upper_leg_depth}" shift="${(upper_leg_width-upper_leg_length)/2}" mass="${upper_leg_mass}">
-    <origin xyz="${hip_depth} 0 0" rpy="0 ${pi/2} 0"/>
+    <origin xyz="0 ${hip_width} 0" rpy="0 0 0"/>
   </xacro:upper_leg>
   <xacro:upper_leg name="rf" width="${upper_leg_width}" length="${upper_leg_length}" depth="${upper_leg_depth}" shift="${(upper_leg_width-upper_leg_length)/2}" mass="${upper_leg_mass}">
-    <origin xyz="${hip_depth} 0 0" rpy="0 ${-pi/2} ${pi}"/>
+    <origin xyz="0 ${-hip_width} 0" rpy="0 0 0"/>
   </xacro:upper_leg>
   <xacro:upper_leg name="lb" width="${upper_leg_width}" length="${upper_leg_length}" depth="${upper_leg_depth}" shift="${(upper_leg_width-upper_leg_length)/2}" mass="${upper_leg_mass}">
-    <origin xyz="${hip_depth} 0 0" rpy="0 ${pi/2} 0"/>
+    <origin xyz="0 ${hip_width} 0" rpy="0 0 0"/>
   </xacro:upper_leg>
   <xacro:upper_leg name="rb" width="${upper_leg_width}" length="${upper_leg_length}" depth="${upper_leg_depth}" shift="${(upper_leg_width-upper_leg_length)/2}" mass="${upper_leg_mass}">
-    <origin xyz="${hip_depth} 0 0" rpy="0 ${-pi/2} ${pi}"/>
+    <origin xyz="0 ${-hip_width} 0" rpy="0 0 0"/>
   </xacro:upper_leg>
   
   <xacro:lower_leg name="lf" width="${lower_leg_width}" length="${lower_leg_length}" depth="${lower_leg_depth}" shift="${(lower_leg_width-lower_leg_length)/2}" mass="${lower_leg_mass}">
-    <origin xyz="0 ${upper_leg_width-upper_leg_length} 0" rpy="0 0 0"/>
+    <origin xyz="0 0 ${upper_leg_width-upper_leg_length}" rpy="0 0 0"/>
   </xacro:lower_leg>
   <xacro:lower_leg name="rf" width="${lower_leg_width}" length="${lower_leg_length}" depth="${lower_leg_depth}" shift="${(lower_leg_width-lower_leg_length)/2}" mass="${lower_leg_mass}">
-    <origin xyz="0 ${upper_leg_width-upper_leg_length} 0" rpy="0 0 0"/>
+    <origin xyz="0 0 ${upper_leg_width-upper_leg_length}" rpy="0 0 0"/>
   </xacro:lower_leg>
   <xacro:lower_leg name="lb" width="${lower_leg_width}" length="${lower_leg_length}" depth="${lower_leg_depth}" shift="${(lower_leg_width-lower_leg_length)/2}" mass="${lower_leg_mass}">
-    <origin xyz="0 ${upper_leg_width-upper_leg_length} 0" rpy="0 0 0"/>
+    <origin xyz="0 0 ${upper_leg_width-upper_leg_length}" rpy="0 0 0"/>
   </xacro:lower_leg>
   <xacro:lower_leg name="rb" width="${lower_leg_width}" length="${lower_leg_length}" depth="${lower_leg_depth}" shift="${(lower_leg_width-lower_leg_length)/2}" mass="${lower_leg_mass}">
-    <origin xyz="0 ${upper_leg_width-upper_leg_length} 0" rpy="0 0 0"/>
+    <origin xyz="0 0 ${upper_leg_width-upper_leg_length}" rpy="0 0 0"/>
   </xacro:lower_leg>
   
   <xacro:foot name="lf" radius="${foot_radius}" mass="${foot_mass}">
-    <origin xyz="0 ${lower_leg_width-lower_leg_length} 0" rpy="0 0 0"/>
+    <origin xyz="0 0 ${lower_leg_width-lower_leg_length}" rpy="0 0 0"/>
   </xacro:foot>
   <xacro:foot name="rf" radius="${foot_radius}" mass="${foot_mass}">
-    <origin xyz="0 ${lower_leg_width-lower_leg_length} 0" rpy="0 0 0"/>
+    <origin xyz="0 0 ${lower_leg_width-lower_leg_length}" rpy="0 0 0"/>
   </xacro:foot>
   <xacro:foot name="lb" radius="${foot_radius}" mass="${foot_mass}">
-    <origin xyz="0 ${lower_leg_width-lower_leg_length} 0" rpy="0 0 0"/>
+    <origin xyz="0 0 ${lower_leg_width-lower_leg_length}" rpy="0 0 0"/>
   </xacro:foot>
   <xacro:foot name="rb" radius="${foot_radius}" mass="${foot_mass}">
-    <origin xyz="0 ${lower_leg_width-lower_leg_length} 0" rpy="0 0 0"/>
+    <origin xyz="0 0 ${lower_leg_width-lower_leg_length}" rpy="0 0 0"/>
   </xacro:foot>
   
   <!-- ======== Sensors Description ======== -->
