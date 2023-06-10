@@ -1,8 +1,10 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
+
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, RegisterEventHandler, IncludeLaunchDescription
+from launch.actions import (DeclareLaunchArgument, ExecuteProcess, 
+                            RegisterEventHandler, IncludeLaunchDescription)
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch.event_handlers import OnProcessExit
@@ -17,7 +19,7 @@ def generate_launch_description():
         get_package_share_directory('gazebo_ros'), 'launch', 'gzserver.launch.py')
     gzclient_path = os.path.join(
         get_package_share_directory('gazebo_ros'), 'launch', 'gzclient.launch.py')
-    
+
     spawn_entity = Node(
         package='gazebo_ros', 
         executable='spawn_entity.py',
@@ -26,64 +28,54 @@ def generate_launch_description():
                         '-y', '0.0',
                         '-z', '0.5',
                     '-topic', '/robot_description'],
-        output='screen'
-        )
-    
-    load_joint_state_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', 'legbot_position_controller',
+        output='screen')
+
+    load_joint_state_broadcaster = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', 'joint_state_broadcaster',
              '--set-state', 'active'],
         shell=True,
-        output='screen'
-        )
-    
-    load_joint_trajectory_position_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', 'joint_state_controller',
+        output='screen')
+
+    load_joint_group_position_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', 'joint_group_position_controller',
              '--set-state', 'active'],
         shell=True,
-        output='screen'
-        )
+        output='screen')
 
     return LaunchDescription([
         DeclareLaunchArgument(
             'gui',
             default_value='true',
             description='Set to "false" to run headless.'),
-            
+
         DeclareLaunchArgument(
             'server',
             default_value='true',
             description='Set to "false" not to run gzserver.'),
-        
+
         # ===== display launch (RViz2) ===== #
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(display_launch_path)
-            ),
-        
+            PythonLaunchDescriptionSource(display_launch_path)),
+
         # ===== Gazebo ===== #
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(gzserver_path),
-            condition=IfCondition(LaunchConfiguration('server'))
-            ),
-        
+            condition=IfCondition(LaunchConfiguration('server'))),
+
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(gzclient_path),
-            condition=IfCondition(LaunchConfiguration('gui'))
-            ),
-        
+            condition=IfCondition(LaunchConfiguration('gui'))),
+
         spawn_entity,
-        
+
         # ===== Ros2 Control ===== #        
         RegisterEventHandler(
             OnProcessExit(
                 target_action=spawn_entity,
-                on_exit=[load_joint_state_controller]
-                )
-            ),
-        
+                on_exit=[load_joint_state_broadcaster])),
+
         RegisterEventHandler(
             OnProcessExit(
-                target_action=load_joint_state_controller,
-                on_exit=[load_joint_trajectory_position_controller]
-                )
-            )       
+                target_action=load_joint_state_broadcaster,
+                on_exit=[load_joint_group_position_controller]))
     ])
