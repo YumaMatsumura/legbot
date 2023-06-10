@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<robot name="color" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="material_gazebo_white">
+    <visual>
+      <material>
+        <ambient>1 1 1 1</ambient>
+        <diffuse>1 1 1 1</diffuse>
+        <specular>0.1 0.1 0.1 1</specular>
+      </material>
+    </visual>
+  </xacro:macro>
+  
+  <xacro:macro name="material_gazebo_black">
+    <visual>
+      <material>
+        <ambient>0 0 0 1</ambient>
+        <diffuse>0 0 0 1</diffuse>
+        <specular>0.1 0.1 0.1 1</specular>
+      </material>
+    </visual>
+  </xacro:macro>
+  
+  <xacro:macro name="material_gazebo_yellow">
+    <visual>
+      <material>
+        <ambient>1 1 0 1</ambient>
+        <diffuse>1 1 0 1</diffuse>
+        <specular>0.1 0.1 0.1 1</specular>
+      </material>
+    </visual>
+  </xacro:macro>
+  
+  <xacro:macro name="material_gazebo_glossy_blue">
+    <visual>
+      <material>
+        <ambient>0.1 0.1 0.3 1</ambient>
+        <diffuse>0.2 0.2 0.7 1</diffuse>
+        <specular>0.3 0.3 0.8 1</specular>
+      </material>
+    </visual>
+  </xacro:macro>
+  
+</robot>

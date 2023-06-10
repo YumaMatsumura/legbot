@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find legbot_description)/urdf/color.urdf.xacro"/>
+  
   <xacro:macro name="foot_gazebo" params="name">
     <gazebo reference="${name}_foot">
+      <xacro:material_gazebo_black/>
       <mu1 value="0.6"/>
       <mu2 value="0.6"/>
       <kp value="10000000.0"/>

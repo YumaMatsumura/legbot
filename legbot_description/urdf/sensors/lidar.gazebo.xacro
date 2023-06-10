@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find legbot_description)/urdf/color.urdf.xacro"/>
+  
   <xacro:macro name="lidar_gazebo" params="name:=laser use_ignition:=true">
     <gazebo reference="${name}">
       <xacro:if value="${use_ignition}">
@@ -67,6 +69,7 @@
           </plugin>
         </sensor>
       </xacro:unless>
+      <xacro:material_gazebo_glossy_blue/>
     </gazebo>
   </xacro:macro>
 </robot>
