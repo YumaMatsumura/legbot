@@ -42,6 +42,7 @@ jobs:
             legbot
             legbot_description
             legbot_gazebo
+            legbot_ignition
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
