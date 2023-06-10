@@ -13,6 +13,18 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    # Set launch params
+    gui = LaunchConfiguration('gui')
+    server = LaunchConfiguration('server')
+    declare_gui_cmd = DeclareLaunchArgument(
+        'gui',
+        default_value='true',
+        description='Set to "false" to run headless.')
+    declare_server_cmd = DeclareLaunchArgument(
+        'server',
+        default_value='true',
+        description='Set to "false" not to run gzserver.')
+
     display_launch_path = os.path.join(
         get_package_share_directory('legbot_description'), 'launch', 'display.launch.py')
     gzserver_path = os.path.join(
@@ -43,19 +55,16 @@ def generate_launch_description():
         output='screen')
 
     return LaunchDescription([
-        DeclareLaunchArgument(
-            'gui',
-            default_value='true',
-            description='Set to "false" to run headless.'),
+        declare_gui_cmd,
 
-        DeclareLaunchArgument(
-            'server',
-            default_value='true',
-            description='Set to "false" not to run gzserver.'),
+        declare_server_cmd,
 
         # ===== display launch (RViz2) ===== #
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(display_launch_path)),
+            PythonLaunchDescriptionSource(display_launch_path),
+            launch_arguments={
+                'use_sim_time': 'true',
+                'use_ignition': 'false'}.items()),
 
         # ===== Gazebo ===== #
         IncludeLaunchDescription(

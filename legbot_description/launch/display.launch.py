@@ -9,20 +9,26 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    # Set launch params
+    use_sim_time = LaunchConfiguration('use_sim_time')
+    use_ignition = LaunchConfiguration('use_ignition')
+    declare_use_sim_time_cmd = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='true',
+        description='Use simulation (Gazebo) clock if true')
+    declare_use_ignition_cmd = DeclareLaunchArgument(
+        'use_ignition',
+        default_value='true',
+        description='Use ignition gazebo if true, use gazebo if false')
+
     # Get the directory
     description_dir = get_package_share_directory('legbot_description')
     xacro_file = os.path.join(description_dir, 'urdf', 'legbot.urdf.xacro')
     rviz_file = os.path.join(description_dir, 'rviz', 'legbot.rviz')
     
-    robot_description = Command(['xacro', ' ', xacro_file])
+    robot_description = Command(['xacro', ' ', xacro_file, ' use_ignition:=', use_ignition])
 
-    # Set launch params
-    use_sim_time = LaunchConfiguration('use_sim_time')
-    declare_use_sim_time_cmd = DeclareLaunchArgument(
-        'use_sim_time',
-        default_value='true',
-        description='Use simulation (Gazebo) clock if true')
-    
+
     # Create nodes
     load_nodes = GroupAction([
         Node(
@@ -48,15 +54,16 @@ def generate_launch_description():
             output='screen',
             parameters=[{'use_sim_time': use_sim_time}]),
 
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            output='screen',
-            arguments=['-d', rviz_file],
-            parameters=[{'use_sim_time': use_sim_time}])
+        #Node(
+        #    package='rviz2',
+        #    executable='rviz2',
+        #    output='screen',
+        #    arguments=['-d', rviz_file],
+        #    parameters=[{'use_sim_time': use_sim_time}])
         ])
 
     return LaunchDescription([
         declare_use_sim_time_cmd,
+        declare_use_ignition_cmd,
         load_nodes
         ])

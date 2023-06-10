@@ -1,10 +1,17 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:macro name="legbot_ros2_control">
+  <xacro:macro name="legbot_ros2_control" params="use_ignition">
     <gazebo>
-      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-        <parameters>$(find legbot_description)/controllers/controllers.yaml</parameters>
-      </plugin>
+      <xacro:if value="${use_ignition}">
+        <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+          <parameters>$(find legbot_description)/controllers/controllers.yaml</parameters>
+        </plugin>
+      </xacro:if>
+      <xacro:unless value="${use_ignition}">
+        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+          <parameters>$(find legbot_description)/controllers/controllers.yaml</parameters>
+        </plugin>
+      </xacro:unless>
     </gazebo>
   </xacro:macro>
 </robot>

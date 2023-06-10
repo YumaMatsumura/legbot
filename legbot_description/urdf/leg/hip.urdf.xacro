@@ -12,7 +12,7 @@
     </xacro:if>
   </xacro:macro>
   
-  <xacro:macro name="hip" params="name parent depth width height mass side *origin">
+  <xacro:macro name="hip" params="name parent depth width height mass side use_ignition *origin">
     <material name="${name}_hip_color">
       <color rgba="1.0 1.0 1.0 1.0"/>
     </material>
@@ -52,6 +52,6 @@
     <xacro:hip_gazebo name="${name}"/>
     
     <!-- ros2_control Plugin -->
-    <xacro:hip_ros2_control name="${name}"/>
+    <xacro:hip_ros2_control name="${name}" use_ignition="${use_ignition}"/>
   </xacro:macro>
 </robot>
