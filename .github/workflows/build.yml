@@ -18,8 +18,8 @@ jobs:
           - docker_image: ubuntu:jammy
             ros_distribution: humble
             ros_version: 2
-      container:
-        image: ${{ matrix.docker_image }}
+    container:
+      image: ${{ matrix.docker_image }}
     steps:
       - name: Setup directories
         run: mkdir -p ros2_ws/src
