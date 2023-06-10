@@ -3,7 +3,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import (DeclareLaunchArgument, ExecuteProcess, 
+from launch.actions import (DeclareLaunchArgument, ExecuteProcess,
                             RegisterEventHandler, IncludeLaunchDescription)
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
@@ -33,13 +33,13 @@ def generate_launch_description():
         get_package_share_directory('gazebo_ros'), 'launch', 'gzclient.launch.py')
 
     spawn_entity = Node(
-        package='gazebo_ros', 
+        package='gazebo_ros',
         executable='spawn_entity.py',
         arguments=['-entity', 'legbot',
-                        '-x', '0.0',
-                        '-y', '0.0',
-                        '-z', '0.5',
-                    '-topic', '/robot_description'],
+                   '-x', '0.0',
+                   '-y', '0.0',
+                   '-z', '0.5',
+                   '-topic', '/robot_description'],
         output='screen')
 
     load_joint_state_broadcaster = ExecuteProcess(
@@ -69,15 +69,15 @@ def generate_launch_description():
         # ===== Gazebo ===== #
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(gzserver_path),
-            condition=IfCondition(LaunchConfiguration('server'))),
+            condition=IfCondition(server)),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(gzclient_path),
-            condition=IfCondition(LaunchConfiguration('gui'))),
+            condition=IfCondition(gui)),
 
         spawn_entity,
 
-        # ===== Ros2 Control ===== #        
+        # ===== Ros2 Control ===== #
         RegisterEventHandler(
             OnProcessExit(
                 target_action=spawn_entity,

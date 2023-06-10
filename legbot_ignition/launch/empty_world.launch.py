@@ -62,5 +62,5 @@ def generate_launch_description():
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=load_joint_state_broadcaster,
-                on_exit=[load_joint_group_position_controller]))  
+                on_exit=[load_joint_group_position_controller]))
         ])

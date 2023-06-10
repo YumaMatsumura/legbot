@@ -25,9 +25,8 @@ def generate_launch_description():
     description_dir = get_package_share_directory('legbot_description')
     xacro_file = os.path.join(description_dir, 'urdf', 'legbot.urdf.xacro')
     rviz_file = os.path.join(description_dir, 'rviz', 'legbot.rviz')
-    
-    robot_description = Command(['xacro', ' ', xacro_file, ' use_ignition:=', use_ignition])
 
+    robot_description = Command(['xacro', ' ', xacro_file, ' use_ignition:=', use_ignition])
 
     # Create nodes
     load_nodes = GroupAction([
@@ -54,12 +53,12 @@ def generate_launch_description():
             output='screen',
             parameters=[{'use_sim_time': use_sim_time}]),
 
-        #Node(
-        #    package='rviz2',
-        #    executable='rviz2',
-        #    output='screen',
-        #    arguments=['-d', rviz_file],
-        #    parameters=[{'use_sim_time': use_sim_time}])
+        Node(
+            package='rviz2',
+            executable='rviz2',
+            output='screen',
+            arguments=['-d', rviz_file],
+            parameters=[{'use_sim_time': use_sim_time}])
         ])
 
     return LaunchDescription([
