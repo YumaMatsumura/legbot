@@ -1,69 +1,62 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
+
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument, GroupAction
+from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+
 
 def generate_launch_description():
-    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
-    rviz_dir = os.path.join(get_package_share_directory('legbot_description'), 'rviz')
-    rviz_file = os.path.join(rviz_dir, 'legbot.rviz')
+    # Get the directory
+    description_dir = get_package_share_directory('legbot_description')
+    xacro_file = os.path.join(description_dir, 'urdf', 'legbot.urdf.xacro')
+    rviz_file = os.path.join(description_dir, 'rviz', 'legbot.rviz')
     
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("legbot_description"),
-                    "urdf",
-                    "legbot.urdf.xacro",
-                ]
-            ),
+    robot_description = Command(['xacro', ' ', xacro_file])
 
-        ]
-    )
-    robot_description = {"robot_description": robot_description_content}
-
-
-    return LaunchDescription([
-        DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='true',
-            description='Use simulation (Gazebo) clock if true'
-        ),
-
+    # Set launch params
+    use_sim_time = LaunchConfiguration('use_sim_time')
+    declare_use_sim_time_cmd = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='true',
+        description='Use simulation (Gazebo) clock if true')
+    
+    # Create nodes
+    load_nodes = GroupAction([
         Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
             name='robot_state_publisher',
             output='screen',
-            parameters=[robot_description]
-        ),
-            
+            parameters=[
+                {'use_sim_time': use_sim_time},
+                {'robot_description': robot_description}]),
+
         Node(
             package='joint_state_publisher',
             executable='joint_state_publisher',
             name='joint_state_publisher',
             output='screen',
-            parameters=[{'use_sim_time': use_sim_time}]
-        ),
-        
+            parameters=[{'use_sim_time': use_sim_time}]),
+
         Node(
             package='joint_state_publisher_gui',
             executable='joint_state_publisher_gui',
-            name='joint_state_publisher_gui'
-        ),
-        
+            name='joint_state_publisher_gui',
+            output='screen',
+            parameters=[{'use_sim_time': use_sim_time}]),
+
         Node(
             package='rviz2',
             executable='rviz2',
             output='screen',
             arguments=['-d', rviz_file],
-            parameters=[{'use_sim_time': use_sim_time}]
-        )
-    ])
+            parameters=[{'use_sim_time': use_sim_time}])
+        ])
+
+    return LaunchDescription([
+        declare_use_sim_time_cmd,
+        load_nodes
+        ])
